@@ -4,6 +4,7 @@
 #include <vector>
 #include <list>
 #include <utility> 
+#include <string>
 
 template <typename T> 
 class HashMap
@@ -21,16 +22,18 @@ class HashMap
 
         const T* find(const std::string& key) const;
 
-        T* find(const std::string& key) {
+        T* find(const std::string& key) { //non const version of find
             const auto& hm = this;
-            return const_cast<T*>(hm.find(key));
+            return const_cast<T*>(hm.find(key)); //converts the const T* to T*
         }
     private:
-        //this is the hash_table array
+        //Helper functions
+        unsigned int hash(std::string key);
+
+        //member variables
         std::vector<std::list<std::pair<string, T>*>> m_buckets; //use a pointer for std::pair for effecient use of memory (dynamic allocation)
         unsigned long m_hashmap_size;
         double m_max_load;
-
 
 };
 
