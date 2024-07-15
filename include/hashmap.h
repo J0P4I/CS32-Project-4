@@ -33,7 +33,7 @@ class HashMap
         HashMap& operator=(const HashMap&) = delete;
 
         //Helper functions
-        unsigned int hash(std::string key) const;
+        unsigned int hash(std::string key, size_t size) const;
 
         void rehash();
 
@@ -51,8 +51,8 @@ HashMap<T>::HashMap(double max_load)
 
 template<typename T>
 HashMap<T>::~HashMap() {
-    for (auto& vec_it = m_buckets.begin(); vec_it != m_buckets.end(); vec_it++) {
-        for (auto& list_it = vec_it->begin(); list_it != vec_it->end(); list_it++) {
+    for (auto vec_it = m_buckets.begin(); vec_it != m_buckets.end(); vec_it++) {
+        for (auto list_it = vec_it->begin(); list_it != vec_it->end(); list_it++) {
             delete *list_it;
         }
     }
@@ -62,7 +62,7 @@ template<typename T>
 void HashMap<T>::insert(const std::string& key, const T& value) {
     m_items++;
 
-    if (static_cast<float>(m_items) / m_buckets.size >= m_max_load) {
+    if (static_cast<float>(m_items) / m_buckets.size() >= m_max_load) {
         rehash();
     }
     
@@ -86,7 +86,7 @@ const T* HashMap<T>::find(const std::string& key) const {
 
     auto linked_list = m_buckets[hashed_index];
     
-    for (const auto& it = linked_list.begin(); it != linked_list.end(); it++) {
+    for (auto it = linked_list.begin(); it != linked_list.end(); it++) {
         //If the key's match, return the iterator (a reference to the class)
         if (((*it)->first) == key) { //Dereferencing it provides a pointer to a pair
             return &(*it)->second;
@@ -110,12 +110,12 @@ void HashMap<T>::rehash() {
 
     for (auto& vector_it : m_buckets) {
         for (auto& list_it : vector_it) {
-            string key = list_it.first;
-            rehashed_index = hash(key, rehashed_buckets.size());
+            std::string key = list_it->first;
+            size_t rehashed_index = hash(key, rehashed_buckets.size());
             rehashed_buckets[rehashed_index].push_back(list_it);
         }
     }
-    
+
     m_buckets = rehashed_buckets;
 }
 
