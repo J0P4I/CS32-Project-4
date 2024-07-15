@@ -72,7 +72,7 @@ void HashMap<T>::insert(const std::string& key, const T& value) {
         T* old_value = find(key); //calls the non-const version of find
         *old_value = value;
     }
-    
+
     if (static_cast<float>(m_items) / m_buckets.size() >= m_max_load) {
         rehash();
     }
@@ -80,7 +80,12 @@ void HashMap<T>::insert(const std::string& key, const T& value) {
 
 template<typename T>
 T& HashMap<T>::operator[](const std::string& key) {
-    return (find(key)) ? *find(key) : nullptr; 
+    if (find(key)) {
+        return *find(key);
+    }
+    else {
+        insert(key, T()); //insert key with the default value of T
+    }
 } 
 
 template<typename T>
