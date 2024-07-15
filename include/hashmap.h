@@ -7,9 +7,6 @@
 #include <utility> 
 #include <string>
 
-//DELETE LATER
-#include <iostream>
-
 template <typename T> 
 class HashMap
 {
@@ -80,12 +77,10 @@ void HashMap<T>::insert(const std::string& key, const T& value) {
 
 template<typename T>
 T& HashMap<T>::operator[](const std::string& key) {
-    if (find(key)) {
-        return *find(key);
-    }
-    else {
+    if (find(key) == nullptr) {
         insert(key, T()); //insert key with the default value of T
     }
+    return *find(key);
 } 
 
 template<typename T>

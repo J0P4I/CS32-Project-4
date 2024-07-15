@@ -30,8 +30,15 @@ int main() {
 
     assert(*hm.find("keyone") == 8);
 
+    //BRACKET TESTS HERE:
 
+    int value_one = hm["keyone"];
+    int value_two = hm["Not a Key!"];
+    hm["newkey"] = 10;
 
+    assert(value_one == 8);
+    assert(value_two == 0);
+    assert(*hm.find("newkey") == 10);
 
     cout << "All test cases passed!" << endl;
 }
