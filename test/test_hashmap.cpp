@@ -22,6 +22,16 @@ int main() {
 
     assert(hm.find("keythree") == nullptr);
 
+    //INSERT METHOD TESTS HERE:
+
+    hm.insert("keyone", 8);
+
+    cout << "Value of keyone (after insertion): " << *hm.find("keyone") << endl;
+
+    assert(*hm.find("keyone") == 8);
+
+
+
 
     cout << "All test cases passed!" << endl;
 }

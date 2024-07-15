@@ -7,6 +7,9 @@
 #include <utility> 
 #include <string>
 
+//DELETE LATER
+#include <iostream>
+
 template <typename T> 
 class HashMap
 {
@@ -34,7 +37,6 @@ class HashMap
 
         //Helper functions
         unsigned int hash(std::string key, size_t size) const;
-
         void rehash();
 
         //Member variables
@@ -60,18 +62,20 @@ HashMap<T>::~HashMap() {
 
 template<typename T>
 void HashMap<T>::insert(const std::string& key, const T& value) {
-    m_items++;
-
+    if (!find(key)) { //If key DOES NOT exist within the hashmap
+        size_t hashed_index = hash(key, m_buckets.size());
+        std::pair<std::string, T>* new_pair = new std::pair<std::string, T>(key, value);
+        m_buckets[hashed_index].push_back(new_pair);
+        m_items++;
+    }
+    else {
+        T* old_value = find(key); //calls the non-const version of find
+        *old_value = value;
+    }
+    
     if (static_cast<float>(m_items) / m_buckets.size() >= m_max_load) {
         rehash();
     }
-    
-    //If load factor exceeded, rehash buckets
-    size_t hashed_index = hash(key, m_buckets.size());
-
-    std::pair<std::string, T>* new_pair = new std::pair<std::string, T>(key, value);
-
-    m_buckets[hashed_index].push_back(new_pair);
 }
 
 template<typename T>
